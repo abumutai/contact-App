@@ -2,7 +2,7 @@
 @section('main')
 <div class="row">
     <div class="col-sm-8 offset-sm-2">
-        <h1 class="display-3">Update a contact</h1>
+        <h3>Update my contacts</h3>
 
         @if ($errors->any())
         <div class="alert alert-danger">
@@ -17,15 +17,23 @@
         <form method="post" action="{{ route('contacts.update', $contact->id) }}">
             @method('PATCH') 
             @csrf
+            <div class="form-group">    
+                <label for="first_name">Contact Type:</label>
+            <select name="type" class="form-control" value="{{$contact->type}}">
+                      <option value="personal">Personal</option>
+                      <option value="corporate">Corporate</option>
+                      <option value="government">Government</option>
+                </select>
+            </div>
             <div class="form-group">
 
-                <label for="first_name">First Name:</label>
-                <input type="text" class="form-control" name="first_name" value={{ $contact->first_name }} />
+                <label for="first_name"> Name:</label>
+                <input type="text" class="form-control" name="first_name" value={{ $contact->name }} />
             </div>
 
             <div class="form-group">
-                <label for="last_name">Last Name:</label>
-                <input type="text" class="form-control" name="last_name" value={{ $contact->last_name }} />
+                <label for="last_name">Description:</label>
+                <input type="text" class="form-control" name="last_name" value={{ $contact->description }} />
             </div>
 
             <div class="form-group">
@@ -41,9 +49,10 @@
                 <input type="text" class="form-control" name="country" value={{ $contact->country }} />
             </div>
             <div class="form-group">
-                <label for="job_title">Job Title:</label>
-                <input type="text" class="form-control" name="job_title" value={{ $contact->job_title }} />
+                <label for="job_title">Job Title/Company Business/Institution Type:</label>
+                <input type="text" class="form-control" name="job_title" value={{ $contact->title }} />
             </div>
+        <input type="hidden" value="{{Auth::user()->id}}">
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>

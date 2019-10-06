@@ -15,3 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('contacts','ContactController');
+
+Route::resource('followers','FollowersController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

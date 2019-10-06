@@ -2,9 +2,7 @@
 
 @section('main')
 <div class="row">
-        <div>
-                <a style="margin: 19px;" href="{{ route('contacts.create')}}" class="btn btn-primary">New contact</a>
-        </div> 
+        
 <div class="col-sm-12">
 
                 @if(session()->get('success'))
@@ -13,43 +11,49 @@
                   </div>
                 @endif
               </div>
+  <div class="container w-75 p-3">
 <div class="col-sm-12">
-    <h1 class="display-3">Contacts</h1>    
+    <h3>Contacts</h3>    
   <table class="table table-striped">
     <thead>
         <tr>
           <td>ID</td>
+          <td>Type</td>
           <td>Name</td>
-          <td>Email</td>
-          <td>Job Title</td>
-          <td>City</td>
-          <td>Country</td>
-          <td colspan = 2>Actions</td>
+          <td>Description</td>
+         
+          <td colspan = "2">Actions</td>
         </tr>
     </thead>
     <tbody>
+        
         @foreach($contacts as $contact)
+        @if($contact->user_id!=Auth::user()->id)
         <tr>
-            <td>{{$contact->id}}</td>
-            <td>{{$contact->first_name}} {{$contact->last_name}}</td>
-            <td>{{$contact->email}}</td>
-            <td>{{$contact->job_title}}</td>
-            <td>{{$contact->city}}</td>
-            <td>{{$contact->country}}</td>
+            <td>{{$contact->user_id}}</td>
+            <td>{{$contact->type}}</td>
+            <td>{{$contact->name}}</td>
+            <td>{{$contact->description}}</td>
+            
             <td>
-                <a href="{{ route('contacts.edit',$contact->id)}}" class="btn btn-primary">Edit</a>
+                <a href="{{ route('contacts.show',$contact->user_id)}}" class="btn btn-primary">View</a>
             </td>
             <td>
-                <form action="{{ route('contacts.destroy', $contact->id)}}" method="post">
+                <form action="{{ route('followers.store', $contact->id)}}" method="post">
                   @csrf
-                  @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                
+                  <input type="hidden" name="following_id" value="{{$contact->id}}">
+                <input type="hidden" name="profile_id" value="{{Auth::user()->id}}">
+                  <button class="btn btn-success" type="submit">Follow</button>
                 </form>
             </td>
-        </tr>
+        </tr> @endif
+
         @endforeach
+       
     </tbody>
   </table>
-<div>
+</div>
+
 </div>
 @endsection

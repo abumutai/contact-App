@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Contact;
+use Auth;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -37,20 +43,30 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'email'=>'required',
-            ''
+            'name'=>'required',
+            'email'=>'required|email',
+            'user_id'=>'integer|required',
+            'type'=>'required',
+            'description'=>'required',
+            'city'=>'required',
+            'country'=>'required',
+            'title'=>'required'
+
         ]);
-        $contact= new Contact([
-            'first_name'=>$request->get('first_name'),
-            'last_name'=>$request->get('last_name'),
-            'email'=>$request->get('email'),
-            'job_title'=>$request->get('job_title'),
-            'city'=>$request->get('city'),
-            'country'=>$request->get('country')
-        ]);
+
+
+        $contact = new Contact;
+        $contact->type =  $request->get('type');
+        $contact->user_id =  $request->get('user_id');
+        $contact->name =  $request->get('name');
+        $contact->description = $request->get('description');
+        $contact->email = $request->get('email');
+        $contact->title = $request->get('title');
+        $contact->city = $request->get('city');
+        $contact->country = $request->get('country');
         $contact->save();
+
+    
         return redirect('/contacts')->with('success','Contact saved successfully');
     }
 
@@ -62,7 +78,14 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        //
+        $contact= Contact::find($id);
+        if(Auth::user()->get('id')!=$id){
+            return view('contacts.view',compact('contact'));
+        }
+        else{
+            return view('contacts.profile',compact('contact'));
+        }
+        
     }
 
     /**
@@ -87,16 +110,25 @@ class ContactController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'email'=>'required'
+            'name'=>'required',
+            'email'=>'required|email',
+            'user_id'=>'integer|required',
+            'type'=>'required',
+            'description'=>'required',
+            'city'=>'required',
+            'country'=>'required',
+            'title'=>'required'
+
         ]);
 
+
         $contact = Contact::find($id);
-        $contact->first_name =  $request->get('first_name');
-        $contact->last_name = $request->get('last_name');
+        $contact->type =  $request->get('type');
+        $contact->user_id =  $request->get('user_id');
+        $contact->name =  $request->get('name');
+        $contact->description = $request->get('description');
         $contact->email = $request->get('email');
-        $contact->job_title = $request->get('job_title');
+        $contact->title = $request->get('title');
         $contact->city = $request->get('city');
         $contact->country = $request->get('country');
         $contact->save();
@@ -117,4 +149,5 @@ class ContactController extends Controller
 
         return redirect('/contacts')->with('success', 'Contact deleted!');
     }
+    
 }

@@ -3,7 +3,7 @@
 @section('main')
 <div class="row">
  <div class="col-sm-8 offset-sm-2">
-    <h1 class="display-3">Add a contact</h1>
+    <h3>Add a contact</h3>
   <div>
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -17,13 +17,21 @@
       <form method="post" action="{{ route('contacts.store') }}">
           @csrf
           <div class="form-group">    
-              <label for="first_name">First Name:</label>
-              <input type="text" class="form-control" name="first_name"/>
+              <label for="first_name">Contact Type:</label>
+              <select name="type" class="form-control" id="">
+                <option value="personal">Personal</option>
+                <option value="corporate">Corporate</option>
+                <option value="government">Government</option>
+              </select>
+          </div>
+          <div class="form-group">    
+              <label for="first_name">Description:</label>
+              <input type="text" class="form-control" placeholder="e.g personal contacts, company, school " name="description"/>
           </div>
 
-          <div class="form-group">
-              <label for="last_name">Last Name:</label>
-              <input type="text" class="form-control" name="last_name"/>
+          <div class="form-group">    
+              <label for="first_name"> Name:</label>
+              <input type="text" class="form-control" name="name"/>
           </div>
 
           <div class="form-group">
@@ -31,7 +39,7 @@
               <input type="text" class="form-control" name="email"/>
           </div>
           <div class="form-group">
-              <label for="city">City:</label>
+              <label for="city">City/Town:</label>
               <input type="text" class="form-control" name="city"/>
           </div>
           <div class="form-group">
@@ -39,8 +47,9 @@
               <input type="text" class="form-control" name="country"/>
           </div>
           <div class="form-group">
-              <label for="job_title">Job Title:</label>
-              <input type="text" class="form-control" name="job_title"/>
+              <label for="title">Job Title/Company Business/Institution Type:</label>
+              <input type="text" class="form-control" name="title"/>
+          <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
           </div>                         
           <button type="submit" class="btn btn-primary">Add contact</button>
       </form>
